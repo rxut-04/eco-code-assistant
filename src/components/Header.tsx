@@ -64,7 +64,7 @@ export function Header({ className, onToggleMenu }: HeaderProps) {
           </Button>
           
           <Button 
-            variant="primary" 
+            variant="default" 
             size="sm" 
             className="text-xs h-8 px-2.5 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90"
           >
