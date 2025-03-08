@@ -5,6 +5,7 @@ import { FileTree } from './FileTree';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Preview } from './Preview';
+import Editor from '@monaco-editor/react';
 import {
   Code,
   Eye,
@@ -24,9 +25,7 @@ export function CodeEditor({ className }: CodeEditorProps) {
   const [activeTab, setActiveTab] = useState<string>('code');
   const [isLoading, setIsLoading] = useState(false);
   const [isBuilding, setIsBuilding] = useState(false);
-
-  // Mock code snippet
-  const codeSnippet = `import React from 'react';
+  const [code, setCode] = useState<string>(`import React from 'react';
 import { Button } from '@/components/ui/button';
 
 function Header() {
@@ -41,7 +40,7 @@ function Header() {
   );
 }
 
-export default Header;`;
+export default Header;`);
 
   const handleRunCode = () => {
     setIsBuilding(true);
@@ -57,6 +56,12 @@ export default Header;`;
         setIsLoading(false);
       }, 1200);
     }, 1500);
+  };
+
+  const handleEditorChange = (value: string | undefined) => {
+    if (value !== undefined) {
+      setCode(value);
+    }
   };
 
   return (
@@ -144,8 +149,21 @@ export default Header;`;
                 )}>
                   {!isFullWidth && <FileTree />}
                 </div>
-                <div className="flex-1 overflow-auto font-mono p-4 bg-editor text-sm">
-                  <pre className="whitespace-pre-wrap">{codeSnippet}</pre>
+                <div className="flex-1 overflow-auto bg-editor">
+                  <Editor
+                    height="100%"
+                    defaultLanguage="typescript"
+                    defaultValue={code}
+                    theme="vs-dark"
+                    onChange={handleEditorChange}
+                    options={{
+                      minimap: { enabled: false },
+                      fontSize: 14,
+                      scrollBeyondLastLine: false,
+                      wordWrap: 'on',
+                      automaticLayout: true,
+                    }}
+                  />
                 </div>
               </div>
             </TabsContent>
@@ -156,8 +174,21 @@ export default Header;`;
             
             <TabsContent value="split" className="mt-0">
               <div className="flex h-[calc(100vh-10rem)]">
-                <div className="flex-1 overflow-auto font-mono p-4 bg-editor text-sm border-r border-border/50">
-                  <pre className="whitespace-pre-wrap">{codeSnippet}</pre>
+                <div className="flex-1 overflow-auto bg-editor border-r border-border/50">
+                  <Editor
+                    height="100%"
+                    defaultLanguage="typescript"
+                    defaultValue={code}
+                    theme="vs-dark"
+                    onChange={handleEditorChange}
+                    options={{
+                      minimap: { enabled: false },
+                      fontSize: 14,
+                      scrollBeyondLastLine: false,
+                      wordWrap: 'on',
+                      automaticLayout: true,
+                    }}
+                  />
                 </div>
                 <div className="flex-1">
                   <Preview isLoading={isLoading} />
